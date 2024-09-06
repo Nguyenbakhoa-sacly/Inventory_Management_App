@@ -18,6 +18,14 @@ const SignUp = () => {
     <>
       <div>
         <Card >
+          <div className='flex justify-center mb-3'>
+            <img
+              style={{
+                width: 54,
+                height: 54
+              }}
+              src={'https://firebasestorage.googleapis.com/v0/b/inventory-management-app-8e149.appspot.com/o/Logo.png?alt=media&token=ec8168de-8f25-4802-9334-ff1579ebc4b0'} alt="" />
+          </div>
           <div className='text-center'>
             <Title level={2}>Create a new account</Title>
             <Paragraph type='secondary'>Start your 30 days free trial</Paragraph>
@@ -77,7 +85,7 @@ const SignUp = () => {
           <div className='text-center mt-5' >
             <Space>
               <Text type='secondary'>Already have an account?</Text>
-              <Link to='/login'>Login</Link>
+              <Link to='/'>Login</Link>
             </Space>
           </div>
         </Card>

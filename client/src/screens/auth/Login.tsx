@@ -19,6 +19,14 @@ const Login = () => {
   return (
     <div>
       <Card >
+        <div className='flex justify-center mb-3'>
+          <img
+            style={{
+              width: 54,
+              height: 54
+            }}
+            src={'https://firebasestorage.googleapis.com/v0/b/inventory-management-app-8e149.appspot.com/o/Logo.png?alt=media&token=ec8168de-8f25-4802-9334-ff1579ebc4b0'} alt="" />
+        </div>
         <div className='text-center'>
           <Title level={2}>Login in to your account</Title>
           <Paragraph type='secondary'>Webcome back! Please enter your details</Paragraph>
