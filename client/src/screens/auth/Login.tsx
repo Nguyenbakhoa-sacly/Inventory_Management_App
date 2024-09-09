@@ -4,18 +4,28 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import SocialLogin from './components/SocialLogin';
 import { LogInType } from '../../types/auth.type'
+import handleAPI from '../../apis/HandleAPI';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addAuth } from '../../redux/reducers/authReducer.';
 const { Title, Text, Paragraph } = Typography;
-
-
 const Login = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRemember, setIsRemember] = useState<boolean>(false)
-
-  const handleLogin = (values: LogInType) => {
-    console.log(values)
+  const handleLogin = async (values: LogInType) => {
+    setIsLoading(true)
+    try {
+      const res: any = await handleAPI('/auth/login', values, 'post')
+      toast.success(res.message)
+      res.data && dispatch(addAuth(res.data))
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false)
+    }
   }
-
   return (
     <div>
       <Card >
@@ -45,6 +55,7 @@ const Login = () => {
               {
                 required: true,
                 message: 'Please input your email!',
+
               },
             ]}
           >
@@ -57,7 +68,8 @@ const Login = () => {
               {
                 required: true,
                 message: 'Please input your password!',
-              }]}
+              },
+            ]}
           >
             <Input.Password placeholder='Enter your password' maxLength={100} type='password' />
           </Form.Item>
@@ -69,6 +81,7 @@ const Login = () => {
         </div>
         <div className='my-5'>
           <Button
+            loading={isLoading}
             onClick={() => form.submit()}
             type='primary' typeof='primary'
             style={{ width: '100%' }}

@@ -1,17 +1,27 @@
-import { Link } from 'react-router-dom'
-import { Button, Card, Form, Input, Space, Typography } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button, Card, Form, Input, message, Space, Typography } from 'antd'
 import { useState } from 'react';
 import SocialLogin from './components/SocialLogin';
 import { SignUpType } from '../../types/auth.type';
+import handleAPI from '../../apis/HandleAPI';
+import { addAuth } from '../../redux/reducers/authReducer.';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const { Title, Text, Paragraph } = Typography;
 
 const SignUp = () => {
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const handleSignUp = (values: SignUpType) => {
-    console.log(values)
+  const dispatch = useDispatch();
+  const handleSignUp = async (values: SignUpType) => {
+    try {
+      const res: any = await handleAPI('/auth/register', values, 'post')
+      res.data && dispatch(addAuth(res.data))
+      toast.success(res.message)
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   }
 
   return (
@@ -54,6 +64,10 @@ const SignUp = () => {
               label='Email'
               rules={[
                 {
+                  type: 'email',
+                  message: 'The input is not valid email!',
+                },
+                {
                   required: true,
                   message: 'Please input your email!',
                 },
@@ -68,13 +82,24 @@ const SignUp = () => {
                 {
                   required: true,
                   message: 'Please input your password!',
-                }]}
+                }, () => ({
+                  validator: (_, value) => {
+                    if (value.length < 6) {
+                      return Promise.reject(new Error('Password must be at least 6 characters long'));
+                    }
+                    else {
+                      return Promise.resolve();
+                    }
+                  },
+                })
+              ]}
             >
               <Input.Password placeholder='Enter your password' maxLength={100} type='password' />
             </Form.Item>
           </Form>
           <div className='my-5'>
             <Button
+              loading={isLoading}
               onClick={() => form.submit()}
               type='primary' typeof='primary'
               style={{ width: '100%' }}
