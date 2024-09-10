@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "antd": "^5.20.5",
     "axios": "^1.7.7",
+    "firebase": "^10.13.1",
     "install": "^0.13.0",
     "npm": "^10.8.3",
     "query-string": "^9.1.0",

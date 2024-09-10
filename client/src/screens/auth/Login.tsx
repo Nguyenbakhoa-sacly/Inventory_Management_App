@@ -3,11 +3,13 @@ import { Button, Card, Checkbox, Form, Input, Space, Typography } from 'antd'
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import SocialLogin from './components/SocialLogin';
-import { LogInType } from '../../types/auth.type'
-import handleAPI from '../../apis/HandleAPI';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
+import { LogInType } from '../../types/auth.type';
+import handleAPI from '../../apis/HandleAPI';
 import { addAuth } from '../../redux/reducers/authReducer.';
+import { localDataNames } from '../../constants/appInfos';
+// 
 const { Title, Text, Paragraph } = Typography;
 const Login = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,9 @@ const Login = () => {
       const res: any = await handleAPI('/auth/login', values, 'post')
       toast.success(res.message)
       res.data && dispatch(addAuth(res.data))
+      if (isRemember) {
+        localStorage.setItem(localDataNames.authData, JSON.stringify(res.data))
+      }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -88,7 +93,7 @@ const Login = () => {
             size='large'
           >Login</Button>
         </div>
-        <SocialLogin />
+        <SocialLogin isRemember={isRemember} />
         <div className='text-center mt-5' >
           <Space>
             <Text type='secondary'>Don't have an account?</Text>

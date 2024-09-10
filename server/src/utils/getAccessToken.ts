@@ -11,6 +11,8 @@ interface Payload {
 }
 
 export const getAccessToken = async (payload: Payload) => {
-  const token = jwt.sign(payload, process.env.SECRET_KEY as string)
+  const token = jwt.sign(payload, process.env.SECRET_KEY as string, {
+    expiresIn: '1d', // 1 day
+  })
   return token
 }

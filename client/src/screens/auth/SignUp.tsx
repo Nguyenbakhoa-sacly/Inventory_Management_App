@@ -1,12 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { Button, Card, Form, Input, message, Space, Typography } from 'antd'
+import { Link } from 'react-router-dom'
+import { Button, Card, Form, Input, Space, Typography } from 'antd'
 import { useState } from 'react';
 import SocialLogin from './components/SocialLogin';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { SignUpType } from '../../types/auth.type';
 import handleAPI from '../../apis/HandleAPI';
 import { addAuth } from '../../redux/reducers/authReducer.';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
+
 
 const { Title, Text, Paragraph } = Typography;
 

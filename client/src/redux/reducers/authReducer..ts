@@ -1,4 +1,5 @@
 
+
 import { createSlice } from '@reduxjs/toolkit'
 import { localDataNames } from '../../constants/appInfos';
 
@@ -12,7 +13,7 @@ const authSlice = createSlice({
   reducers: {
     addAuth: (state, action) => {
       state.data = action.payload;
-      syncLocal(action.payload);
+
     },
     remoAuth: (state, action) => {
       state.data = initialState.data
