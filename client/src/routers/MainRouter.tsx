@@ -1,4 +1,4 @@
-import HomeScreens from "../screens/HomeScreens"
+import { HomeScreens } from "../screens"
 
 const MainRouter = () => {
   return (

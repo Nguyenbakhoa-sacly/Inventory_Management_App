@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 import { User } from '../../types/auth.type';
 import { getAccessToken } from '../utils/getAccessToken';
 
-class UserController {
+class UsersController {
   register = async (req: Request, res: Response) => {
     const { name, email, password } = req.body
     try {
@@ -121,4 +121,32 @@ class UserController {
   }
 }
 
-export const userController = new UserController();
+export const usersController = new UsersController();
+
+
+export const refreshToken = async (req: any, res: any) => {
+  const { id } = req.query
+  console.log(id)
+  try {
+    const user = await UserModel.findById(id)
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      })
+    }
+    const token = await getAccessToken({
+      _id: user._id,
+      email: user.email,
+      rule: user.rule ?? 1,
+    })
+    return res.status(200).json({
+      message: "Refresh token",
+      token: token
+    });
+
+  } catch (err: any) {
+    return res.status(404).json({
+      message: err.message,
+    })
+  }
+} 

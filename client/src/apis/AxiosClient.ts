@@ -1,20 +1,31 @@
+
 import axios from 'axios';
 import queryString from 'query-string';
+import { localDataNames } from '../constants/appInfos';
 
 const baseURL = import.meta.env.VITE_BASE_URL
 console.log(baseURL)
+
+const getAccessToken = () => {
+  const res: any = localStorage.getItem(localDataNames.authData)
+  return res ? JSON.parse(res).token : ''
+}
+
 const axiosClient = axios.create({
   baseURL,
   paramsSerializer: (params: any) => queryString.stringify(params),
 })
 
 axiosClient.interceptors.request.use(async (config: any) => {
+
+  const acccessToken = getAccessToken()
   config.headers = {
-    'Authorization': '',
+    'Authorization': `Bearer ${acccessToken}`,
     Accept: 'application/json',
     ...config.headers,
   }
   config.data;
+  console.log(config)
   return config;
 })
 

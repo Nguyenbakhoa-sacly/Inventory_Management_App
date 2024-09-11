@@ -5,6 +5,8 @@ import cors from 'cors';
 // require('./dbs/init.mongodb')
 
 import UserRouter from './routers/User.router'
+import ProductRouter from './routers/Products.router'
+
 dotenv.config();
 
 const app: Express = express();
@@ -12,14 +14,11 @@ const port = process.env.PORT || 3000;
 const mongoURL = process.env.MONGOBD_URL;
 
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-  optionsSuccessStatus: 200,
-}));
+app.use(cors());
 
 // router
 app.use('/v1/api', UserRouter)
+app.use('/v1/api', ProductRouter)
 
 
 // connect to MongoDB
