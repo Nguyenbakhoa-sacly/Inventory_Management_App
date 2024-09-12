@@ -4,9 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { localDataNames } from '../../constants/appInfos';
 
 const initialState = {
-  data: {
-    token: '',
-  }
+  data: {}
 }
 
 const authSlice = createSlice({
@@ -21,16 +19,13 @@ const authSlice = createSlice({
       state.data = initialState.data
       syncLocal({});
     },
-    refreshToken: (state, action) => {
-      state.data.token = action.payload;
-      console.log("state.data.token::", state.data.token);
-    }
+
   },
 })
 
 
 export const authReducer = authSlice.reducer
-export const { addAuth, remoAuth, refreshToken } = authSlice.actions
+export const { addAuth, remoAuth } = authSlice.actions
 
 // export const authSelector = (state: any) => state.authReducer.data
 
