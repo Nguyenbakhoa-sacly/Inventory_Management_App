@@ -12,7 +12,7 @@ const MainRouter = () => {
           <SiderComponent />
           <Layout>
             <HeaderComponent />
-            <Content>
+            <Content className="m-4 bg-white">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
                 <Route path="/inventory" element={<InventoryScreen />} />

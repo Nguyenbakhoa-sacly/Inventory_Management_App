@@ -6,6 +6,9 @@ import cors from 'cors';
 
 import UserRouter from './routers/User.router'
 import ProductRouter from './routers/Products.router'
+import SupplierRouter from './routers/Supplier.router'
+
+
 
 dotenv.config();
 
@@ -19,6 +22,7 @@ app.use(cors());
 // router
 app.use('/v1/api', UserRouter)
 app.use('/v1/api', ProductRouter)
+app.use('/v1/api', SupplierRouter)
 
 
 // connect to MongoDB
