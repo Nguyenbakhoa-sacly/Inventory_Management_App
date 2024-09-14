@@ -4,7 +4,6 @@ import queryString from 'query-string';
 import { localDataNames } from '../constants/appInfos';
 
 const baseURL = import.meta.env.VITE_BASE_URL
-console.log(baseURL)
 
 const getAccessToken = () => {
   const res: any = localStorage.getItem(localDataNames.authData)
@@ -24,7 +23,6 @@ axiosClient.interceptors.request.use(async (config: any) => {
     ...config.headers,
   }
   config.data;
-  console.log(config)
   return config;
 })
 

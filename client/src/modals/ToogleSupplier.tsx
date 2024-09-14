@@ -1,5 +1,5 @@
 import { Avatar, Button, Form, Input, message, Modal, Select } from 'antd'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BiUser } from 'react-icons/bi'
 import { upLoadFile } from '../utils/uploadFIle'
 import { replacename } from '../utils/replaceName'
@@ -20,9 +20,17 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
   const inputRef = useRef<any>();
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    if (supplier) {
+      form.setFieldsValue(supplier);
+      setIsTaking(supplier.isTaking === 1);
+    }
+  }, [supplier]);
+
   const addNewSupplier = async (val: any) => {
     setIsLoading(true)
     const data: any = {}
+    const api = `${supplier ? `/update-supplier?id=${supplier._id}` : '/add-supplier'}`
     for (const i in val) {
       data[i] = val[i] ?? ''
     }
@@ -33,10 +41,10 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
     }
     data.slug = replacename(val.name)
     try {
-      const res: any = await handleAPI('/add-supplier', data, 'post')
+      const res: any = await handleAPI(api, data, supplier ? 'put' : 'post')
       if (res) {
         message.success(res.message)
-        onAddNew(res.data)
+        !supplier && onAddNew(res.data)
         handleClose()
       }
     } catch (e: any) {
@@ -45,10 +53,12 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
       setIsLoading(false)
     }
   }
+
   const handleClose = () => {
     form.resetFields();
     onClose();
   }
+
   return (
     <>
       <Modal
@@ -60,8 +70,8 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
         okButtonProps={{
           loading: isLoading
         }}
-        title="Add Supplier"
-        okText="Add Supplier"
+        title={supplier ? 'Update' : 'Add Supplier'}
+        okText={supplier ? 'Update' : 'Add Supplier'}
         cancelText="Discard"
       >
         <Form
@@ -82,22 +92,24 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
           </div>
           <div className='flex justify-center items-center mb-3'>
             <label htmlFor='inpfile'>
+
               {
                 file ? (
                   <Avatar size={90}
                     src={URL.createObjectURL(file)} />
-                ) : (
-                  <Avatar size={90} style={{
-                    background: 'white',
-                    cursor: 'pointer',
-                    borderRadius: '50%',
-                    borderColor: 'rgba(0, 0, 0, 0.25)',
-                    borderWidth: '2px',
-                    borderStyle: 'dashed',
-                  }}>
-                    <BiUser fill='#3333' size={60} />
-                  </Avatar>
-                )
+                ) : supplier ?
+                  <Avatar size={90} src={supplier.photoUrl} /> : (
+                    <Avatar size={90} style={{
+                      background: 'white',
+                      cursor: 'pointer',
+                      borderRadius: '50%',
+                      borderColor: 'rgba(0, 0, 0, 0.25)',
+                      borderWidth: '2px',
+                      borderStyle: 'dashed',
+                    }}>
+                      <BiUser fill='#3333' size={60} />
+                    </Avatar>
+                  )
               }
             </label>
             <div className=''>
