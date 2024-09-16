@@ -8,7 +8,9 @@ const SupplierSchema = new Schema({
   contact: { type: String },
   isTaking: { type: Number, default: 0, enum: [0, 1] },
   photoUrl: { type: String },
-  slug: { type: String }
+  slug: { type: String },
+  email: { type: String },
+  active: { type: Number }
 }, {
   timestamps: true,
 });

@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import { Menu, MenuProps, Layout, Typography } from "antd"
+import { Layout, Menu, MenuProps, Typography } from "antd";
 import { BiBox, BiHomeAlt } from "react-icons/bi";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaRegRectangleList } from "react-icons/fa6";
 import { MdOutlineInventory2 } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 const { Text } = Typography
 type MenuItem = Required<MenuProps>['items'][number];

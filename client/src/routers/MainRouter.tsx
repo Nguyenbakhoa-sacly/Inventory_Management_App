@@ -1,4 +1,4 @@
-import { Layout } from "antd"
+import { Affix, Layout } from "antd"
 import { HomeScreen, InventoryScreen, ManagestoreScreen, OrderScreen, ReportScreen, SupplierScreen } from "../screens"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { HeaderComponent, SiderComponent } from "../components"
@@ -9,9 +9,13 @@ const MainRouter = () => {
     <>
       <BrowserRouter>
         <Layout>
-          <SiderComponent />
+          <Affix offsetTop={0}>
+            <SiderComponent />
+          </Affix>
           <Layout>
-            <HeaderComponent />
+            <Affix offsetTop={0}>
+              <HeaderComponent />
+            </Affix>
             <Content className="m-4 bg-white">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />

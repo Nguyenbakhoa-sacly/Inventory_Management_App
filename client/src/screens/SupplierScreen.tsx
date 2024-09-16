@@ -1,11 +1,11 @@
 import { Button, message, Modal, Space, Typography } from "antd";
-import Table, { ColumnProps } from "antd/es/table"
+import Table, { ColumnProps } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { BsFilterSquare } from "react-icons/bs";
+import { CiEdit, CiSquareRemove } from "react-icons/ci";
+import handleAPI from "../apis/HandleAPI";
 import { ToogleSupplier } from "../modals";
 import { SupplierModel } from "../types/supplier.type";
-import handleAPI from "../apis/HandleAPI";
-import { CiEdit, CiSquareRemove } from "react-icons/ci";
 
 const { Title, Text } = Typography
 const { confirm } = Modal
@@ -13,8 +13,18 @@ const SupplierScreen = () => {
   const [isVisibleModalAddNew, setIsVisibleModalAddNew] = useState<boolean>(false);
   const [suppliers, setSuppliers] = useState<SupplierModel[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [totalPages, setTotalPages] = useState<number>(10)
   const [supplierSelected, setSupplierSelected] = useState<SupplierModel>()
   const columns: ColumnProps<SupplierModel>[] = [
+    {
+      title: '#',
+      dataIndex: '_id',
+      align: 'center',
+      render: (id: string, record: SupplierModel, index: number) =>
+        (page - 1) * pageSize + index + 1,
+    },
     {
       key: 'name',
       title: 'Supplier Name',
@@ -44,7 +54,8 @@ const SupplierScreen = () => {
     {
       key: 'on',
       title: 'On the way',
-      dataIndex: '',
+      dataIndex: 'active',
+      render: (num) => num ?? '-'
     },
     {
       key: 'buttonContainer',
@@ -76,13 +87,14 @@ const SupplierScreen = () => {
 
   useEffect(() => {
     getSupplier()
-  }, [])
+  }, [page, pageSize])
 
   const getSupplier = async () => {
     setIsLoading(true)
     try {
-      const res = await handleAPI('/suppliers');
-      res.data && setSuppliers(res.data)
+      const res = await handleAPI(`/suppliers?page=${page}&pageSize=${pageSize}`);
+      res.data && setSuppliers(res.data.supplier)
+      setTotalPages(res.data.totalPage)
     } catch (err: any) {
       message.error(err.message);
     } finally {
@@ -106,6 +118,20 @@ const SupplierScreen = () => {
   return (
     <div>
       <Table
+        pagination={{
+          showSizeChanger: true,
+          onShowSizeChange: (curren, size) => {
+            setPageSize(size);
+          },
+          total: totalPages,
+          onChange: (curren, size) => {
+            setPage(curren)
+          }
+
+        }}
+        scroll={{
+          y: 'calc(100vh - 330px)'
+        }}
         loading={isLoading}
         dataSource={suppliers}
         columns={columns}
@@ -123,16 +149,16 @@ const SupplierScreen = () => {
             </div>
           </div>
         )}
-
       />
       <ToogleSupplier
         visible={isVisibleModalAddNew}
-        onClose={() => {
+        loadingDataUpdate={() =>
           supplierSelected && getSupplier()
+        }
+        onClose={() => {
           setSupplierSelected(undefined)
           setIsVisibleModalAddNew(false)
-        }
-        }
+        }}
         // - no se luu thang vao suppliers ma ko can goi laij data
         onAddNew={(val) => setSuppliers([...suppliers, val])}
         /* - khi nguoi dung click vao icon edit thi thong tin cua nhà

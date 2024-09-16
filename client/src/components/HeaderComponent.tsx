@@ -1,10 +1,30 @@
-import { Avatar, Button, Input, Layout } from "antd"
+import { Avatar, Button, Dropdown, Input, Layout, MenuProps } from "antd"
 import { BiSearch } from "react-icons/bi"
 import { GoBell } from "react-icons/go"
+import { useDispatch, useSelector } from "react-redux"
+import { auth } from "../firebase/firebase.config"
+import { remoAuth } from "../redux/reducers/authReducer."
+import { useNavigate } from "react-router-dom"
 
 const { Header } = Layout
 
 const HeaderComponent = () => {
+  const imageUser = useSelector((state: any) => state.auth?.data?.rest?.photoUrl)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const items: MenuProps['items'] = [
+    {
+      key: 'logout',
+      label: 'Đăng xuất',
+      onClick: () => {
+        auth.signOut()
+        dispatch(remoAuth())
+        localStorage.clear()
+        navigate('/')
+      }
+    },
+  ]
+
   return (
     <>
       <Header >
@@ -18,7 +38,9 @@ const HeaderComponent = () => {
           </div>
           <div className="col-span-2 flex items-center justify-end gap-4">
             <Button icon={<GoBell size={20} />} />
-            <Avatar src={'https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp'} />
+            <Dropdown menu={{ items }} placement="bottomLeft" arrow>
+              <Avatar src={imageUser} />
+            </Dropdown>
           </div>
         </div>
       </Header >

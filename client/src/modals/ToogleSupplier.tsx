@@ -1,19 +1,20 @@
 import { Avatar, Button, Form, Input, message, Modal, Select } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { BiUser } from 'react-icons/bi'
-import { upLoadFile } from '../utils/uploadFIle'
-import { replacename } from '../utils/replaceName'
 import handleAPI from '../apis/HandleAPI'
 import { SupplierModel } from '../types/supplier.type'
+import { replacename } from '../utils/replaceName'
+import { upLoadFile } from '../utils/uploadFIle'
 
 interface Props {
   visible: boolean
   onClose: () => void
   onAddNew: (val: SupplierModel) => void
+  loadingDataUpdate: () => void
   supplier?: SupplierModel
 }
 
-const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
+const ToogleSupplier = ({ visible, onClose, onAddNew, supplier, loadingDataUpdate }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isTaking, setIsTaking] = useState<boolean>();
   const [file, setFile] = useState<any>();
@@ -45,6 +46,7 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
       if (res) {
         message.success(res.message)
         !supplier && onAddNew(res.data)
+        loadingDataUpdate()
         handleClose()
       }
     } catch (e: any) {
@@ -131,6 +133,12 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier }: Props) => {
           </Form.Item>
           <Form.Item name={'product'} label='Product'>
             <Input placeholder='Enter product' allowClear />
+          </Form.Item>
+          <Form.Item name={'email'} label='Email'>
+            <Input placeholder='Enter Email' allowClear />
+          </Form.Item>
+          <Form.Item name={'active'} label='Active'>
+            <Input placeholder='' allowClear type='number' />
           </Form.Item>
           <Form.Item name={'categories'} label='Category'>
             <Select options={[]} placeholder='Select product category' />

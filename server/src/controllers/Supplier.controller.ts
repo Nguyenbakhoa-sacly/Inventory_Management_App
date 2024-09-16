@@ -6,9 +6,16 @@ import SupplierModel from "../models/Supplier.model";
 
 class SupplierController {
 
-  getAllSupplier = async (req: Request, res: Response) => {
+  getAllSupplier = async (req: any, res: any) => {
+
+    const { pageSize, page } = req.query
     try {
+      const skip = (page - 1) * pageSize;
+
       const supplier = await SupplierModel.find()
+        .skip(skip).limit(pageSize)
+      const totalPage = await SupplierModel.countDocuments()
+
       if (!supplier) {
         return res.status(404).json({
           message: 'Không tìm thấy nhà cung cấp nào'
@@ -16,7 +23,10 @@ class SupplierController {
       }
       return res.status(200).json({
         message: 'Danh sách nhà cung cấp',
-        data: supplier,
+        data: {
+          totalPage,
+          supplier
+        }
       })
 
     } catch (err: any) {

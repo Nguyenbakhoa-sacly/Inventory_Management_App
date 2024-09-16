@@ -11,4 +11,6 @@ export interface SupplierModel {
   isTaking: number
   slug: string
   _id: string
+  email: string
+  active: number
 }
