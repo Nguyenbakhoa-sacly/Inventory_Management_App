@@ -1,13 +1,13 @@
 import { Button, message, Modal, Space, Typography } from "antd";
-import Table, { ColumnProps } from "antd/es/table";
+import { ColumnProps } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { BsFilterSquare } from "react-icons/bs";
 import { CiEdit, CiSquareRemove } from "react-icons/ci";
 import handleAPI from "../apis/HandleAPI";
+import { TableComponent } from "../components";
 import { ToogleSupplier } from "../modals";
 import { SupplierModel } from "../types/supplier.type";
 
-const { Title, Text } = Typography
+const { Text } = Typography
 const { confirm } = Modal
 const SupplierScreen = () => {
   const [isVisibleModalAddNew, setIsVisibleModalAddNew] = useState<boolean>(false);
@@ -32,17 +32,29 @@ const SupplierScreen = () => {
     },
     {
       key: 'product',
-      title: 'Product',
+      title: 'Supplier product',
       dataIndex: 'product',
+      ellipsis: true
+    },
+    {
+      key: 'categories',
+      title: 'Categories',
+      dataIndex: 'categories',
     },
     {
       key: 'contact',
       title: 'Contact Number',
       dataIndex: 'contact',
+      ellipsis: true
+    },
+    {
+      key: 'price',
+      title: 'Supplier price',
+      dataIndex: 'price',
     },
     {
       key: 'email',
-      title: 'Email',
+      title: 'Supplier email',
       dataIndex: 'email',
     },
     {
@@ -115,40 +127,23 @@ const SupplierScreen = () => {
     }
   }
 
+  const onAddNew = () => {
+    setIsVisibleModalAddNew(true)
+  }
   return (
     <div>
-      <Table
-        pagination={{
-          showSizeChanger: true,
-          onShowSizeChange: (curren, size) => {
-            setPageSize(size);
-          },
-          total: totalPages,
-          onChange: (curren, size) => {
-            setPage(curren)
-          }
-
-        }}
-        scroll={{
-          y: 'calc(100vh - 330px)'
-        }}
+      <TableComponent
         loading={isLoading}
-        dataSource={suppliers}
+        records={suppliers}
         columns={columns}
-        title={() => (
-          <div className="flex justify-between">
-            <div>
-              <Title level={5}>Suppliers</Title>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setIsVisibleModalAddNew(true)}
-                className=" font-medium" type="primary">Add Product</Button>
-              <Button className=" font-medium" icon={<BsFilterSquare size={20} />}>Filters</Button>
-              <Button className=" font-medium" >Download all</Button>
-            </div>
-          </div>
-        )}
+        onAddNew={onAddNew}
+        onPageChange={(val) => {
+          setPage(val.page)
+          setPageSize(val.pageSize)
+        }}
+        scrollHeight={'calc(100vh - 330px)'}
+        total={totalPages}
+        title={'Supplier'}
       />
       <ToogleSupplier
         visible={isVisibleModalAddNew}

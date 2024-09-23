@@ -94,7 +94,6 @@ const ToogleSupplier = ({ visible, onClose, onAddNew, supplier, loadingDataUpdat
           </div>
           <div className='flex justify-center items-center mb-3'>
             <label htmlFor='inpfile'>
-
               {
                 file ? (
                   <Avatar size={90}
